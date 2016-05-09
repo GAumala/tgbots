@@ -1,0 +1,4 @@
+
+*.swp
+.jshintrc
+node_modules/
