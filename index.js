@@ -43,7 +43,9 @@ function sendMediaFile(type, chat_id, filepath, token){
                     json : true,
                     formData: formData },
                     function (error, response, body){
-                        if(response.body.ok)
+                        if(error)
+                            console.error(error)
+                        else if(response.body.ok)
                             console.log("sent: " + filepath);
                     });
 
@@ -57,7 +59,9 @@ exports.sendMessage = function (chat_id, text, token){
     var args ="?chat_id=" + chat_id + "&text=" + text
     client(exports.getBaseUrl(myToken) + SEND_MESSAGE + args, 
         function( error, response, data) {
-            if(response.body.ok)
+            if(error)
+                console.error(error)
+            else if(response.body.ok)
                 console.log("sent:" + text);
     });
 }
@@ -68,7 +72,9 @@ exports.sendMarkdown = function(chat_id, text, token){
     var args ="?chat_id=" + chat_id + "&text=" + text +
          "&parse_mode=Markdown";
     client(exports.getBaseUrl(myToken) + SEND_MESSAGE + args, function( error, response, data) {
-        if(response.body.ok)
+        if(error)
+            console.error(error)
+        else if(response.body.ok)
             console.log("sent: " + text);
     });
 
@@ -80,7 +86,9 @@ exports.sendLocation = function(chat_id, lat, lon, token){
     var args ="?chat_id=" + chat_id + "&latitude=" + lat +
          "&longitude=" + lon;
     client(exports.getBaseUrl(myToken) + SEND_LOCATION + args, function( error, response, data) {
-        if(response.body.ok)
+        if(error)
+            console.error(error)
+        else if(response.body.ok)
             console.log("sent: location");
     });
 
