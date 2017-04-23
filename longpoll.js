@@ -1,7 +1,4 @@
-
-const async = require('async');
 const client = require('request');
-
 const telegram = require("./index.js")
 
 const bots = []
@@ -19,16 +16,16 @@ function isACommandMessage(text){
 
 function extractCommand(string){
     var index = string.indexOf('@')
-    string = string.toLowerCase()    
+    string = string.toLowerCase()
     if( index == -1)
         return string
-    else 
+    else
         return string.substring(0,index)
 }
-        
+
 /*
  * This message object is guaranteed to hace a text attribute
- */ 
+ */
 function processMessageText(message, myBot){
     //console.log("message text: " + text);
     if(isACommandMessage(message.text)){
@@ -55,7 +52,6 @@ function processMessage(message, myBot){
 }
 
 function processUpdate(update, myBot) {
-    
     var newOffset = update.update_id + 1;
     if(newOffset > myBot.updateOffset){
         myBot.updateOffset = newOffset
@@ -66,47 +62,42 @@ function processUpdate(update, myBot) {
     }
 }
 
+function handleUpdateResponseFunc(selectedBot) {
+    return function( error, response, data) {
+          if(!error && response.statusCode == 200) {
+              console.log(response.body);
+              if(response.body.ok){
+                  let messages = response.body.result;
+                  for(let i = 0; i < messages.length; i++){
+                      processUpdate(messages[i], selectedBot);
+                  }
+              }
+          } else {
+              console.error(error);
+          }
+      }
+}
+
 function getUpdates(){
-    //console.log("offset: " + updateOffset);
-    const selectedBot = bots[botIndex%bots.length]
-    client({
-        url: telegram.getBaseUrl(selectedBot.getToken()) + GET_UPDATES + 
-            "?offset=" + selectedBot.updateOffset,
-        json: true
-    }, function( error, response, data) {
-        if(!error && response.statusCode == 200) {
-            console.log(response.body);
-            if(response.body.ok){
-                let messages = response.body.result;
-                for(let i = 0; i < messages.length; i++){
-                    processUpdate(messages[i], selectedBot);
-                }
-            }
-        } else {
-            console.log(error);
-        }
-    });
-    botIndex++;
+    bots.forEach(function (selectedBot) {
+      const offset = selectedBot.updateOffset || "0"
+      const updateUrl = telegram.getBaseUrl(selectedBot.getToken()) +
+        GET_UPDATES + "?offset=" + offset
+      const responseCallback = handleUpdateResponseFunc(selectedBot)
+      client({
+          url: updateUrl,
+          json: true
+      }, responseCallback);
+    })
 }
 
 module.exports = {
-    
-
     addBot : function (bot){
         bots.push(bot)
     },
 
-    start : function(){
-        async.whilst(
-            function () { return true; },
-            function (callback) {
-                getUpdates()
-                setTimeout(function () {
-                    callback(null)
-                }, 2000);
-            },
-            function (err, n) {
-            })
+    start : function(period = 2000){
+      setInterval(getUpdates, period)
     }
 
 };

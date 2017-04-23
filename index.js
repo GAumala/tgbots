@@ -9,9 +9,8 @@ const SEND_VOICE = "sendVoice";
 const SEND_PHOTO = "sendPhoto";
 const SEND_LOCATION = "sendLocation";
 
-var defaultToken = ""
+let defaultToken = ""
 
-var exports = module.exports =  { }
 
 function selectToken(token) {
     if(token) return token
@@ -37,27 +36,26 @@ function createFormData(type, chat_id, filepath){
 
 /* type can be either SEND_PHOTO or SEND_VOICE */
 function sendMediaFile(type, chat_id, filepath, token){
-    var myToken = selectToken(token)
-        var formData = createFormData(type, chat_id, filepath)
-        client.post({url: exports.getBaseUrl(myToken) + type, 
-                    json : true,
-                    formData: formData },
-                    function (error, response, body){
-                        if(error)
-                            console.error(error)
-                        else if(response.body.ok)
-                            console.log("sent: " + filepath);
-                    });
-
+    const myToken = selectToken(token)
+    const formData = createFormData(type, chat_id, filepath)
+    client.post({
+      url: module.exports.getBaseUrl(myToken) + type,
+      json : true,
+      formData: formData },
+      function (error, response, body){
+        if(error)
+            console.error(error)
+        else if(response.body.ok)
+            console.log("sent: " + filepath);
+      });
 }
 
-exports.sendMessage = function (chat_id, text, token){
-
+module.exports.sendMessage = function (chat_id, text, token){
     text = utf8.encode(text)
     var myToken = selectToken(token)
 
     var args ="?chat_id=" + chat_id + "&text=" + text
-    client(exports.getBaseUrl(myToken) + SEND_MESSAGE + args, 
+    client(module.exports.getBaseUrl(myToken) + SEND_MESSAGE + args,
         function( error, response, data) {
             if(error)
                 console.error(error)
@@ -66,26 +64,25 @@ exports.sendMessage = function (chat_id, text, token){
     });
 }
 
-exports.sendMarkdown = function(chat_id, text, token){
-
+module.exports.sendMarkdown = function(chat_id, text, token){
     var myToken = selectToken(token)
     var args ="?chat_id=" + chat_id + "&text=" + text +
          "&parse_mode=Markdown";
-    client(exports.getBaseUrl(myToken) + SEND_MESSAGE + args, function( error, response, data) {
+    client(module.exports.getBaseUrl(myToken) + SEND_MESSAGE + args,
+      function( error, response, data) {
         if(error)
             console.error(error)
         else if(response.body.ok)
             console.log("sent: " + text);
     });
-
 }
 
-exports.sendLocation = function(chat_id, lat, lon, token){
-
+module.exports.sendLocation = function(chat_id, lat, lon, token){
     var myToken = selectToken(token)
     var args ="?chat_id=" + chat_id + "&latitude=" + lat +
          "&longitude=" + lon;
-    client(exports.getBaseUrl(myToken) + SEND_LOCATION + args, function( error, response, data) {
+    client(module.exports.getBaseUrl(myToken) + SEND_LOCATION + args,
+      function( error, response, data) {
         if(error)
             console.error(error)
         else if(response.body.ok)
@@ -94,25 +91,18 @@ exports.sendLocation = function(chat_id, lat, lon, token){
 
 }
 
-exports.sendVoice = function (chat_id, filepath, token){
+module.exports.sendVoice = function (chat_id, filepath, token){
     sendMediaFile(SEND_VOICE, chat_id, filepath, token)
 }
 
-exports.sendPhoto = function (chat_id, filepath, token){
+module.exports.sendPhoto = function (chat_id, filepath, token){
     sendMediaFile(SEND_PHOTO, chat_id, filepath, token)
 }
 
-exports.getBaseUrl = function (token){
+module.exports.getBaseUrl = function (token){
 return TELEGRAM_BASE_URL + token + '/'
 }
 
-exports.setDefaultToken = function (token){
+module.exports.setDefaultToken = function (token){
     defaultToken = token
 }
-
-
-
-
-
-
-
