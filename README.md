@@ -5,7 +5,7 @@ Simple javascript framework for telegram bots
 
 ## Longpolling API
 
-This library supports longpolling for receiving updates. Each time an update is 
+This library supports longpolling for receiving updates. Each time an update is
 received, the library will call an appropiate function of your bot. To start the
 long polling, first add your bot, and then call the `start()` method like this:
 
@@ -29,7 +29,7 @@ bot.processTextCommand(cmd, str, message)
 
 Called when your bot received a command message. `cmd` is the command string
 without the '/' prefix. `str` is the rest of the message and `message` is the
-complete raw message text.
+complete message object received from Telegram.
 
 ##### Example
 
@@ -40,7 +40,7 @@ following parameters:
 |---|---|
 | `cmd`  | "start"  |
 | `str`  | "hello bot"  |
-| `message`  | "/start hello bot"  |
+| `message`  | [Message Object](https://core.telegram.org/bots/api#message)  |
 
 #### Process Text Message
 
@@ -107,7 +107,7 @@ module.exports = {
 
 Now that you have your bot and are able to listen to updates, it's time to talk
 back. This module exposes various methods that you can use to send messages to a
-Telegram chat using the HTTP API. All methods execute non-blocking networking. 
+Telegram chat using the HTTP API. All methods execute non-blocking networking.
 Here is a list of the available methods:
 
 #### Send Message
@@ -116,7 +116,7 @@ Here is a list of the available methods:
 tgbots.sendMessage(chat_id, text, token);
 ```
 
-Sends a text message to a telegram chat. 
+Sends a text message to a telegram chat.
 
 | argument  | value   |
 |---|---|
@@ -130,7 +130,7 @@ Sends a text message to a telegram chat.
 tgbots.sendMarkdown(chat_id, text, token);
 ```
 
-Sends a text message with markdown to a telegram chat. 
+Sends a text message with markdown to a telegram chat.
 
 | argument  | value   |
 |---|---|
@@ -144,13 +144,13 @@ Sends a text message with markdown to a telegram chat.
 tgbots.sendLocation(chat_id, lat, lon, token);
 ```
 
-Sends a message with a geographical location to a telegram chat. 
+Sends a message with a geographical location to a telegram chat.
 
 | argument  | value   |
 |---|---|
 | `chat_id`  | (Required) A string with id of the chat that will receive the message |
-| `lat`  | (Required) A number with the latitude of the location | 
-| `lon`  | (Required) A number with the longuitud of the location | 
+| `lat`  | (Required) A number with the latitude of the location |
+| `lon`  | (Required) A number with the longuitud of the location |
 | `token`  | (Optional) Your bot's token. If no token is specified, the default token is used.|
 
 #### Send Voice
@@ -166,7 +166,7 @@ currently is 50 MB.
 | argument  | value   |
 |---|---|
 | `chat_id`  | (Required) A string with id of the chat that will receive the message |
-| `filepath`  | (Required) A string with the path to the voice note file to send | 
+| `filepath`  | (Required) A string with the path to the voice note file to send |
 | `token`  | (Optional) Your bot's token. If no token is specified, the default token is used.|
 
 #### Send Photo
@@ -175,12 +175,12 @@ currently is 50 MB.
 tgbots.sendPhoto(chat_id, filepath, token);
 ```
 
-Sends a message with a photo to a telegram chat. 
+Sends a message with a photo to a telegram chat.
 
 | argument  | value   |
 |---|---|
 | `chat_id`  | (Required) A string with id of the chat that will receive the message |
-| `filepath`  | (Required) A string with the path to the photo file to send | 
+| `filepath`  | (Required) A string with the path to the photo file to send |
 | `token`  | (Optional) Your bot's token. If no token is specified, the default token is used.|
 
 

@@ -65,7 +65,6 @@ function processUpdate(update, myBot) {
 function handleUpdateResponseFunc(selectedBot) {
     return function( error, response, data) {
           if(!error && response.statusCode == 200) {
-              console.log(response.body);
               if(response.body.ok){
                   let messages = response.body.result;
                   for(let i = 0; i < messages.length; i++){

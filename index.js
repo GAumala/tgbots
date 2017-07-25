@@ -45,8 +45,6 @@ function sendMediaFile(type, chat_id, filepath, token){
       function (error, response, body){
         if(error)
             console.error(error)
-        else if(response.body.ok)
-            console.log("sent: " + filepath);
       });
 }
 
@@ -59,8 +57,6 @@ module.exports.sendMessage = function (chat_id, text, token){
         function( error, response, data) {
             if(error)
                 console.error(error)
-            else if(response.body.ok)
-                console.log("sent:" + text);
     });
 }
 
@@ -72,8 +68,6 @@ module.exports.sendMarkdown = function(chat_id, text, token){
       function( error, response, data) {
         if(error)
             console.error(error)
-        else if(response.body.ok)
-            console.log("sent: " + text);
     });
 }
 
@@ -85,8 +79,6 @@ module.exports.sendLocation = function(chat_id, lat, lon, token){
       function( error, response, data) {
         if(error)
             console.error(error)
-        else if(response.body.ok)
-            console.log("sent: location");
     });
 
 }
